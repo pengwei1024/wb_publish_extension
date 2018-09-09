@@ -4,6 +4,12 @@ $('#abc').click(function () {
     });
 });
 
+$('#refresh').click(function () {
+    sendMessageToContentScript('refresh', (response) => {
+        $("#text").html(response);
+    });
+});
+
 
 function sendMessageToContentScript(message, callback) {
     getCurrentTabId((tabId) => {

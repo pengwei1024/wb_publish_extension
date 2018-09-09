@@ -1,28 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // 从服务器获取图片和标题等信息
-    $.ajax({
-        url: 'http://localhost/BeautifulGirl/index.php/local/get',
-        success: (data) => {
-            if (data.code === 200) {
-                window.beauty_data = data;
-            } else {
-                alert(data.msg);
-            }
-        },
-        error: (error) => {
-            alert(error);
-        }
-    });
+    refresh();
 });
-
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let req = JSON.stringify(request);
     switch (req) {
+        case '"refresh"':
+            let data = refresh();
+            sendResponse(data.title);
+            break;
         case '"cookie"':
             if (window.beauty_data && Array.isArray(window.beauty_data.data)) {
                 let item = window.beauty_data.data[0];
-                alert(JSON.stringify(item));
                 sendWB('小姐姐分享 @' + item.name, item.images);
             } else {
                 alert('参数错误');
@@ -31,8 +20,36 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         default:
             break;
     }
+    console.log('finish');
     // sendResponse('我是popup，我已收到你的消息：' + req);
 });
+
+/**
+ * 从服务器获取图片和标题等信息
+ * @param callback
+ * @returns {*}
+ */
+function refresh(callback) {
+    $.ajax({
+        url: 'http://localhost/BeautifulGirl/index.php/local/get',
+        async:false,
+        success: (data) => {
+            console.log(data);
+            if (data.code === 200) {
+                window.beauty_data = data;
+                if (callback) {
+                    callback(data.data[0]);
+                }
+            } else {
+                alert(data.msg);
+            }
+        },
+        error: (xhr, status, error) => {
+            console.error(xhr, status, error);
+        }
+    });
+    return window.beauty_data.data[0];
+}
 
 /**
  * 发送微博
