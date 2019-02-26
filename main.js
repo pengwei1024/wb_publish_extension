@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     switch (req) {
         case '"refresh"':
             let data = refresh();
-            sendResponse(data.title);
+            sendResponse(data.title + "<br/><img src='https://wx1.sinaimg.cn/mw690/"+data.images[0]+".jpg' />");
             break;
         case '"cookie"':
             if (window.beauty_data && Array.isArray(window.beauty_data.data)) {
@@ -34,6 +34,9 @@ function refresh(callback) {
         url: 'http://localhost/BeautifulGirl/index.php/local/get',
         async:false,
         success: (data) => {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
             console.log(data);
             if (data.code === 200) {
                 window.beauty_data = data;
@@ -48,6 +51,7 @@ function refresh(callback) {
             console.error(xhr, status, error);
         }
     });
+    console.log('window.beauty_data', window.beauty_data);
     return window.beauty_data.data[0];
 }
 

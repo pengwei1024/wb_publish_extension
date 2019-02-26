@@ -6,7 +6,7 @@ $('#abc').click(function () {
 
 $('#refresh').click(function () {
     sendMessageToContentScript('refresh', (response) => {
-        $("#text").html(response);
+        $("#text").html(decodeURIComponent(response));
     });
 });
 
