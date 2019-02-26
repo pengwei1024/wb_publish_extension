@@ -63,7 +63,7 @@ function refresh(callback) {
 function sendWB(title, imageArray) {
     let image = imageArray.join('|');
     $.ajax({
-        url: 'https://weibo.com/aj/mblog/add?ajwvr=6&__rnd=1536327309563',
+        url: 'https://weibo.com/aj/mblog/add?ajwvr=6&__rnd=' + (new Date().getTime()),
         type: 'POST',
         data: `location=v6_content_home&text=${title}&appkey=&style_type=1&pic_id=${image}&tid=&pdetail=&mid=&isReEdit=false&gif_ids=&rank=0&rankid=&module=stissue&pub_source=main_&updata_img_num=${imageArray.length}&pub_type=dialog&isPri=null&_t=0`,
         complete: function (data) {
