@@ -1,6 +1,6 @@
 $('#abc').click(function () {
     sendMessageToContentScript('cookie', (response) => {
-        alert('收到来自content-script的回复：' + response);
+        console.log('收到来自content-script的回复：' + response);
     });
 });
 

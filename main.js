@@ -7,7 +7,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     switch (req) {
         case '"refresh"':
             let data = refresh();
-            sendResponse(data.title + "<br/><img src='https://wx1.sinaimg.cn/mw690/"+data.images[0]+".jpg' />");
+            let response = data.title + "<div id=\"imageList\">";
+            data.images.forEach((url)=> {
+                response += `<img src='https://wx1.sinaimg.cn/mw690/${url}.jpg' />`;
+            });
+            response += "</div>";
+            sendResponse(response);
             break;
         case '"cookie"':
             if (window.beauty_data && Array.isArray(window.beauty_data.data)) {
